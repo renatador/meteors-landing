@@ -3,14 +3,12 @@ import { RootState } from '../../app/store';
 import {Meteor} from "./types";
 import {fetchMeteors} from "./meteorAPI";
 
-const  LOADING:string = 'loading';
-const  FAILED:string = 'failed';
-const  SUCCESS:string = 'success';
 const METEOR_FETCH:string = 'meteor/fetchMeteor';
 
 export interface MeteorState {
   meteors: Meteor[];
-  status:string;
+  loading:boolean;
+  failed:boolean;
   byYearFilter: string;
   byMassFilter: string;//Filter;
   showNotification:boolean;
@@ -18,7 +16,8 @@ export interface MeteorState {
 
 const initialState: MeteorState = {
   meteors: [],
-  status: LOADING,
+  loading: false,
+  failed:false,
   byYearFilter:'',
   byMassFilter: '',
   showNotification : false
@@ -66,15 +65,15 @@ export const meteorSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchMeteorAsync.pending, (state) => {
-        state.status = LOADING;
+        state.loading = true;
       });
       builder.addCase(fetchMeteorAsync.fulfilled,
       (state, action) => {
           state.meteors = action.payload;
-          state.status = SUCCESS;
+          state.loading = false;
       });
       builder.addCase(fetchMeteorAsync.rejected, (state) => {
-        state.status = FAILED;
+        state.failed = true;
         state.meteors = [];
     });
   },

@@ -2,10 +2,13 @@ import React, {useEffect} from 'react';
 import {Table} from "react-bootstrap";
 import {calculateFilter, selectFilteredMeteors} from "./meteorSlice";
 import {useAppDispatch, useAppSelector} from "../../app/hooks";
+import MeteorSpinner from "./MeteorSpinner";
+import MeteorError from "./MeteorError";
 
 
 export function MeteorList() {
     const dispatch = useAppDispatch();
+    const {loading,failed} = useAppSelector(state => state.meteor);
     const  meteors = useAppSelector(state => selectFilteredMeteors()(state));
 
     useEffect(()=>{
@@ -19,6 +22,8 @@ export function MeteorList() {
         <div>
             {meteors.length} meteors
         </div>
+        {failed && (<MeteorError/>)}
+        {loading && (<MeteorSpinner/>)}
         <Table striped bordered hover>
             <thead>
             <tr>
@@ -32,16 +37,15 @@ export function MeteorList() {
             </thead>
             <tbody>
             {meteors && (meteors.map( (meteor, index) =>
-            <>
-
-                <tr>
-                    <td>{index+1}</td>
-                    <td>{meteor.id}</td>
-                    <td>{meteor.name}</td>
-                    <td>{new Date(meteor.year).toLocaleDateString()}</td>
-                    <td>{meteor.mass}</td>
-                </tr>
-            </>
+                <React.Fragment key={meteor.id} >
+                    <tr >
+                        <td>{index+1}</td>
+                        <td>{meteor.id}</td>
+                        <td>{meteor.name}</td>
+                        <td>{new Date(meteor.year).toLocaleDateString()}</td>
+                        <td>{meteor.mass}</td>
+                    </tr>
+                </React.Fragment>
             ))
             }
             </tbody>
