@@ -36,7 +36,6 @@ export function SearchMeteorsPanel() {
         event.stopPropagation();
         setNotification('');
         dispatch(updateByMassFilter(mass));
-        setNotification('Please add a valid mass');
     }
 
     const onClearYearClicked = (event: React.MouseEvent<HTMLInputElement>) => {
