@@ -4,12 +4,10 @@ import {selectUpdateYearFilter, updateByMassFilter, updateByYearFilter} from "./
 import {Alert, Button, Col, Container, FormControl, InputGroup, Row} from "react-bootstrap";
 import {Search, X} from "react-bootstrap-icons";
 
-const isValidYear = (yearString:string): boolean =>
-{
+const isValidYear = (yearString:string): boolean => {
     const year = parseInt(yearString, 10);
     return (year > 0 || year < 3000)
 };
-
 
 export function SearchMeteorsPanel() {
     const [year, setYear] = useState('');
@@ -30,7 +28,7 @@ export function SearchMeteorsPanel() {
         if(isValidYear(year)) {
             dispatch(updateByYearFilter(year));
         } else {
-            setNotification('Please fix the year')
+            setNotification('Please add a valid year')
         }
     }
 
@@ -38,11 +36,11 @@ export function SearchMeteorsPanel() {
         event.stopPropagation();
         setNotification('');
         dispatch(updateByMassFilter(mass));
+        setNotification('Please add a valid mass');
     }
 
     const onClearYearClicked = (event: React.MouseEvent<HTMLInputElement>) => {
         event.stopPropagation();
-        setNotification('');
         setYear('');
         setNotification('');
         dispatch(updateByYearFilter(''));
